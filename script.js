@@ -6,6 +6,7 @@ const ttInput = document.getElementById("tt");
 const ppInput = document.getElementById("pp");
 const cxInput = document.getElementById("cx");
 const btn = document.getElementById("btnCalc");
+const valInput = document.getElementById("val");
 
 
 function calcularPesos() {
@@ -42,24 +43,32 @@ function calcularPesos() {
   plInput.value = pl.toFixed(3);
 }
 
-function rightDate() {
-
+function calcularNovaValidade() {
   // 1. Pega o elemento input
-  const dataInput = document.getElementById("val");
+  const inputValidade = document.getElementById('val');
 
-  //2. Obtém o valor do input (ex: "2025-09-01")
-  const valorData = dataInput.value;
+  // 2. Obtém o valor do input (ex: "2025-09-15")
+  const dataString = inputValidade.value;
 
-  //3. Cria um novo objeto Date com base no valor do input
-  const dataObjeto = new Date(valorData);
+  // Verifica se o campo não está vazio
+  if (dataString) {
+    // 3. Cria um objeto Date a partir da string
+    const dataObjeto = new Date(dataString);
 
-  //4. Extrai o dia, mês e ano
-  const dia = dataObjeto.getDate(); //retorna o dia do mês (1-31)
-  const mes = dataObjeto.getMonth() +  1; // Retorna o mês (0-11), por isso somamos 1
-  const ano = dataObjeto.getFullYear(); // Retorna o ano com 4 dígitos
+    // Usa setDate() para subtrair 10 dias.
+    // O JavaScript lida automaticamente com a mudança de mês e ano.
+    dataObjeto.setDate(dataObjeto.getDate() - 10);
 
-  let data = new Date(dataInput);
-  data.setDate(data.getDate() - 10);
+    // 4. Converte a data de volta para o formato YYYY-MM-DD
+    // O .toISOString().substring(0, 10) é a maneira mais segura para isso.
+    const novaDataParaInput = dataObjeto.toISOString().substring(0, 10);
+    
+    // 5. Exibe o resultado no próprio input
+    inputValidade.value = novaDataParaInput;
+  } else {
+    // Caso o usuário não tenha selecionado uma data
+    alert("Por favor, selecione uma data.");
+  }
 }
 
 btn.addEventListener('click', calcularPesos);
